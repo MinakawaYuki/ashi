@@ -8,7 +8,6 @@ import (
 
 type Config struct {
 	Mysql       Mysql
-	Server      Server
 	RedisStruct RedisStruct
 }
 
@@ -19,11 +18,6 @@ type Mysql struct {
 	PassWord string `json:"passWord"`
 	DataBase string `json:"dataBase"`
 	TimeOut  string `json:"timeOut"`
-}
-
-type Server struct {
-	Port        string `json:"port"`
-	ReleaseMode string `json:"releaseMode"`
 }
 
 type RedisStruct struct {
@@ -48,10 +42,6 @@ func (c *Config) GetConfig() Config {
 			PassWord: cfg.Section("mysql").Key("PassWord").String(),
 			DataBase: cfg.Section("mysql").Key("DataBase").String(),
 			TimeOut:  cfg.Section("mysql").Key("TimeOut").String(),
-		},
-		Server: Server{
-			Port:        cfg.Section("server").Key("Port").String(),
-			ReleaseMode: cfg.Section("server").Key("ReleaseMode").String(),
 		},
 		RedisStruct: RedisStruct{
 			Host:     cfg.Section("redis").Key("Host").String(),

@@ -6,12 +6,13 @@ import (
 
 type User struct {
 	Base
-	Name     string `json:"name"`
-	UserName string `json:"username"`
-	PassWord string `json:"password"`
+	Name     string `gorm:"column:name"`
+	UserName string `gorm:"column:username"`
+	PassWord string `gorm:"column:password"`
+	Salt     string `gorm:"column:salt"`
 }
 
-func (u User) Add(model interface{}) error {
-	err := setting.Db.Create(model).Error
+func (u User) Add(model User) error {
+	err := setting.Db.Create(&model).Error
 	return err
 }

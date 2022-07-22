@@ -18,6 +18,6 @@ func user(r *gin.Engine) {
 	group.Use(middleware.JWTAuth())
 	{
 		c := &controller.UserController{}
-		group.GET("/add", c.Add)
+		group.POST("/add", c.Add)
 	}
 }

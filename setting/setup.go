@@ -1,9 +1,7 @@
 package setting
 
 import (
-	"ashi/router"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	redisClient "github.com/go-redis/redis/v8"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -13,6 +11,11 @@ import (
 
 var Db *gorm.DB
 var Redis *redisClient.Client
+
+func init() {
+	InitMysql()
+	InitRedis()
+}
 
 func InitMysql() {
 	var c Config
@@ -44,13 +47,4 @@ func InitRedis() {
 		&redisClient.Options{Addr: config.RedisStruct.Host + ":" + config.RedisStruct.Port, Password: config.RedisStruct.Password, DB: config.RedisStruct.DB})
 	fmt.Printf("\nDefault redis connection successful\n")
 	Redis = rdb
-}
-
-func InitServer() {
-	var c Config
-	config := c.GetConfig()
-	r := gin.Default()
-	gin.SetMode(config.Server.ReleaseMode)
-	router.Register(r)
-	r.Run(":" + config.Server.Port)
 }
