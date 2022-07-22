@@ -12,6 +12,6 @@ type User struct {
 }
 
 func (u User) Add(model interface{}) error {
-	err := setting.Db.DB.Create(model).Error
+	err := setting.Db.Create(model).Error
 	return err
 }

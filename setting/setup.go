@@ -4,17 +4,15 @@ import (
 	"ashi/router"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	redisClient "github.com/go-redis/redis/v8"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"os"
 )
 
-type mysqlUtil struct {
-	DB *gorm.DB
-}
-
-var Db mysqlUtil
+var Db *gorm.DB
+var Redis *redisClient.Client
 
 func InitMysql() {
 	var c Config
@@ -34,9 +32,18 @@ func InitMysql() {
 		fmt.Println("[SetupDefaultDatabase#sqlDb error]: " + err.Error() + " " + dsn)
 		os.Exit(1)
 	}
-	fmt.Printf("\nDefault atabase connection successful: %s\n", dsn)
+	fmt.Printf("\nDefault database connection successful: %s\n", dsn)
 
-	Db = mysqlUtil{DB: conn}
+	Db = conn
+}
+
+func InitRedis() {
+	var c Config
+	config := c.GetConfig()
+	rdb := redisClient.NewClient(
+		&redisClient.Options{Addr: config.RedisStruct.Host + ":" + config.RedisStruct.Port, Password: config.RedisStruct.Password, DB: config.RedisStruct.DB})
+	fmt.Printf("\nDefault redis connection successful\n")
+	Redis = rdb
 }
 
 func InitServer() {
