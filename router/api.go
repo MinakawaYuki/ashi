@@ -19,5 +19,6 @@ func user(r *gin.Engine) {
 	{
 		c := &controller.UserController{}
 		group.POST("/add", c.Add)
+		group.POST("/login", c.Login)
 	}
 }

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var excludeUrl = []string{"/api/user/add"}
+var excludeUrl = []string{"/api/user/add", "/api/user/login"}
 
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {

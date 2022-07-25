@@ -3,10 +3,17 @@ package service
 import (
 	"ashi/model"
 	"ashi/utils"
+	"errors"
 	"github.com/gin-gonic/gin"
 )
 
 var log utils.Log
+
+type Result struct {
+	model.Base
+	Name     string `json:"name,omitempty"`
+	UserName string `json:"username,omitempty"`
+}
 
 func AddUser(c *gin.Context) error {
 	var user model.User
@@ -24,4 +31,45 @@ func AddUser(c *gin.Context) error {
 		return err
 	}
 	return nil
+}
+
+func Login(username string, password string) (data map[string]interface{}, err error) {
+	var userModel model.User
+	user, err := userModel.GetByPw(username)
+	if err != nil {
+		log.Info(map[string]interface{}{
+			"username": username,
+		}, "查询失败")
+		return map[string]interface{}{}, err
+	}
+	passwordMd5 := utils.Md5(password + user.Salt)
+
+	if passwordMd5 != user.PassWord {
+		newErr := errors.New("密码不正确")
+		return map[string]interface{}{}, newErr
+	}
+
+	// 获取token
+	data = make(map[string]interface{})
+	token, err := utils.GenToken(utils.Auth{
+		Username: user.UserName,
+		Password: user.PassWord,
+	})
+
+	if err != nil {
+		log.Info(map[string]interface{}{
+			"username": username,
+		}, "查询失败")
+		return map[string]interface{}{}, err
+	}
+	var result Result
+	result.Base.ID = user.ID
+	result.Base.CreatedAt = user.CreatedAt
+	result.Base.UpdatedAt = user.UpdatedAt
+	result.Name = user.Name
+	result.UserName = user.UserName
+	data["user"] = result
+	data["token"] = token
+
+	return data, nil
 }

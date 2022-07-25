@@ -20,7 +20,7 @@ func init() {
 func InitMysql() {
 	var c Config
 	config := c.GetConfig()
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", config.Mysql.UserName, config.Mysql.PassWord, config.Mysql.Host, config.Mysql.Port, config.Mysql.DataBase)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.Mysql.UserName, config.Mysql.PassWord, config.Mysql.Host, config.Mysql.Port, config.Mysql.DataBase)
 	conn, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Warn),
 	})
