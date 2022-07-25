@@ -63,5 +63,5 @@ func RefreshToken(tokenStr string) (string, error) {
 		claims.RegisteredClaims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(time.Hour))
 		return GenToken(claims.Auth)
 	}
-	return "", errors.New("Cloudn't handle this token")
+	return "", errors.New("couldn't handle this token")
 }
