@@ -7,8 +7,8 @@ import (
 type User struct {
 	Base
 	Name     string `gorm:"column:name" json:"name,omitempty"`
-	UserName string `gorm:"column:username" json:"username,omitempty"`
-	PassWord string `gorm:"column:password" json:"password,omitempty"`
+	UserName string `gorm:"column:username" json:"username,omitempty" binding:"required"`
+	PassWord string `gorm:"column:password" json:"password,omitempty" binding:"required"`
 	Salt     string `gorm:"column:salt" json:"salt,omitempty"`
 }
 

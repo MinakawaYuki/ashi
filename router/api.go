@@ -8,6 +8,7 @@ import (
 )
 
 func Register(r *gin.Engine) {
+	r.Use(gin.Recovery())
 	r.StaticFS("/upload", http.Dir("./runtime/upload"))
 	user(r)
 	upload(r)
