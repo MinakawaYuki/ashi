@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  dog:
+    build: ./
+    image: ashi
+    container_name: ashi
+    restart: always
+    ports:
+      - "10490:10490"
+    depends_on:
+      - mysql
+      - redis
+  mysql:
+    container_name: mysql
+    image: mysql:8.0.29
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: root
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    ports:
+      - "3306:3306"
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    volumes:
+      - /usr/local/redis:/usr/local/redis
+    ports:
+      - "6379:6379"
+
