@@ -7,6 +7,7 @@ import (
 )
 
 func Register(r *gin.Engine) {
+	r.Use(gin.Recovery())
 	user(r)
 }
 
