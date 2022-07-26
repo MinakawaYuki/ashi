@@ -9,8 +9,8 @@ type UserController struct {
 }
 
 type login struct {
-	UserName string `json:"username,omitempty"`
-	Password string `json:"password"`
+	UserName string `json:"username,omitempty" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 func (u *UserController) Add(c *gin.Context) {
