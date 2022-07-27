@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/unknwon/com"
 )
 
 type CharacterRes struct {
@@ -20,11 +21,6 @@ type CharacterRes struct {
 	CharacterThumb    string   `json:"character_thumb"`
 	Property          string   `json:"property"`
 	Pic               []string `json:"pic"`
-}
-type query struct {
-	Character model.Character
-	Page      int `json:"page"`
-	PageSize  int `json:"page_size"`
 }
 
 func GetByID(c *gin.Context) (res CharacterRes, err error) {
@@ -58,15 +54,16 @@ func GetDetail(c *gin.Context) (res CharacterRes, err error) {
 }
 
 func GetList(c *gin.Context) (res []CharacterRes, total int64, err error) {
-	var ch query
-	var character model.Character
+	var ch model.Character
 	var chr []model.Character
 	var ress []CharacterRes
+	page := com.StrTo(c.DefaultQuery("page", "0")).MustInt()
+	pageSize := com.StrTo(c.DefaultQuery("page_size", "0")).MustInt()
 	err = c.ShouldBindJSON(&ch)
 	if err != nil {
 		return []CharacterRes{}, 0, err
 	}
-	chr, err = character.GetCharacterList(ch.Character, ch.Page, ch.PageSize)
+	chr, err = ch.GetCharacterList(ch, page, pageSize)
 	if err != nil {
 		return []CharacterRes{}, 0, err
 	}
@@ -75,7 +72,7 @@ func GetList(c *gin.Context) (res []CharacterRes, total int64, err error) {
 		res = res.makeRes(item)
 		ress = append(ress, res)
 	}
-	return ress, character.GetCount(ch.Character), err
+	return ress, ch.GetCount(ch), err
 }
 
 func (CharacterRes) makeRes(ch model.Character) CharacterRes {
