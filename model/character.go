@@ -25,17 +25,17 @@ func (c *Character) GetCharacterByID(id string) (character Character, err error)
 	return character, err
 }
 
-func (c *Character) GetCharacter(query map[string]interface{}) (character Character, err error) {
-	err = setting.Db.Where(query).Preload("Pic").Find(&character).Error
+func (c *Character) GetCharacter(ch Character) (character Character, err error) {
+	err = setting.Db.Where(&ch).Preload("Pic").First(&character).Error
 	return character, err
 }
 
-func (c *Character) GetCharacterList(query map[string]interface{}, page int, pageSize int) (characters []Character, err error) {
-	err = setting.Db.Where(query).Offset((page - 1) * pageSize).Limit(pageSize).Preload("Pic").Find(&characters).Error
+func (c *Character) GetCharacterList(ch Character, page int, pageSize int) (characters []Character, err error) {
+	err = setting.Db.Where(&ch).Offset((page - 1) * pageSize).Limit(pageSize).Preload("Pic").Find(&characters).Error
 	return characters, err
 }
 
-func (c *Character) GetCount(query map[string]interface{}) (count int64) {
-	setting.Db.Model(&Character{}).Where(query).Count(&count)
+func (c *Character) GetCount(ch Character) (count int64) {
+	setting.Db.Model(&Character{}).Where(&ch).Count(&count)
 	return count
 }

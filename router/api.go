@@ -50,5 +50,7 @@ func character(r *gin.Engine) {
 	{
 		c := &controller.CharacterController{}
 		group.GET("/getById", c.GetCharacterById)
+		group.POST("/getInfo", c.GetCharacter)
+		group.POST("/getList", c.GetCharacterList)
 	}
 }

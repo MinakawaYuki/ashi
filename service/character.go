@@ -21,6 +21,11 @@ type CharacterRes struct {
 	Property          string   `json:"property"`
 	Pic               []string `json:"pic"`
 }
+type query struct {
+	Character model.Character
+	Page      int `json:"page"`
+	PageSize  int `json:"page_size"`
+}
 
 func GetByID(c *gin.Context) (res CharacterRes, err error) {
 	id, exist := c.GetQuery("character_id")
@@ -32,7 +37,49 @@ func GetByID(c *gin.Context) (res CharacterRes, err error) {
 	if err != nil {
 		return CharacterRes{}, err
 	}
-	fmt.Println("ch ", ch)
+
+	res = res.makeRes(ch)
+	return res, nil
+}
+
+func GetDetail(c *gin.Context) (res CharacterRes, err error) {
+	var ch model.Character
+	err = c.ShouldBindJSON(&ch)
+	if err != nil {
+		return CharacterRes{}, err
+	}
+	ch, err = ch.GetCharacter(ch)
+	fmt.Println("ch res :", ch)
+	if err != nil {
+		return CharacterRes{}, err
+	}
+	res = res.makeRes(ch)
+	return res, err
+}
+
+func GetList(c *gin.Context) (res []CharacterRes, total int64, err error) {
+	var ch query
+	var character model.Character
+	var chr []model.Character
+	var ress []CharacterRes
+	err = c.ShouldBindJSON(&ch)
+	if err != nil {
+		return []CharacterRes{}, 0, err
+	}
+	chr, err = character.GetCharacterList(ch.Character, ch.Page, ch.PageSize)
+	if err != nil {
+		return []CharacterRes{}, 0, err
+	}
+	for _, item := range chr {
+		var res CharacterRes
+		res = res.makeRes(item)
+		ress = append(ress, res)
+	}
+	return ress, character.GetCount(ch.Character), err
+}
+
+func (CharacterRes) makeRes(ch model.Character) CharacterRes {
+	var res CharacterRes
 	res.CharacterID = ch.CharacterID
 	res.Name = ch.Name
 	res.CharacterCategory = ch.CharacterCategory
@@ -46,14 +93,16 @@ func GetByID(c *gin.Context) (res CharacterRes, err error) {
 	for _, url := range ch.Pic {
 		var thumb []string
 		var skin []string
-		err = json.Unmarshal([]byte(url.Thumb), &thumb)
+		err := json.Unmarshal([]byte(url.Thumb), &thumb)
 		fmt.Println("thumb ", thumb)
 		if err != nil {
-			return CharacterRes{}, errors.New("json 解析 Thumb 出错")
+			log.Info(map[string]interface{}{}, "json 解析 Thumb 出错")
+			continue
 		}
 		err = json.Unmarshal([]byte(url.Skin), &skin)
 		if err != nil {
-			return CharacterRes{}, errors.New("json 解析 Skin 出错")
+			log.Info(map[string]interface{}{}, "json 解析 Skin 出错")
+			continue
 		}
 		for _, t := range thumb {
 			res.Pic = append(res.Pic, t)
@@ -62,5 +111,6 @@ func GetByID(c *gin.Context) (res CharacterRes, err error) {
 			res.Pic = append(res.Pic, s)
 		}
 	}
-	return res, nil
+
+	return res
 }
