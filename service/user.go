@@ -18,6 +18,11 @@ type result struct {
 func AddUser(c *gin.Context) error {
 	var user model.User
 	err := c.ShouldBindJSON(&user)
+	exist, err := user.GetByPw(user.UserName)
+	if exist.ID != 0 {
+		log.Info(map[string]interface{}{}, "用户名已存在")
+		return errors.New("用户名已存在")
+	}
 	salt := utils.GenRandString(6)
 	user.PassWord = utils.Md5(user.PassWord + salt)
 	user.Salt = salt

@@ -28,7 +28,9 @@ func (u *UserController) Login(c *gin.Context) {
 	var login login
 	err := c.ShouldBindJSON(&login)
 	if err != nil {
-		ApiError("登录失败", map[string]interface{}{}, c)
+		ApiError("登录失败", map[string]interface{}{
+			"err": "参数缺失",
+		}, c)
 		return
 	}
 	data, loginErr := service.Login(login.UserName, login.Password)
