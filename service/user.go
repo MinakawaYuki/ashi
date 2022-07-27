@@ -9,7 +9,7 @@ import (
 
 var log utils.Log
 
-type Result struct {
+type result struct {
 	model.Base
 	Name     string `json:"name,omitempty"`
 	UserName string `json:"username,omitempty"`
@@ -62,7 +62,7 @@ func Login(username string, password string) (data map[string]interface{}, err e
 		}, "查询失败")
 		return map[string]interface{}{}, err
 	}
-	var result Result
+	var result result
 	result.Base.ID = user.ID
 	result.Base.CreatedAt = user.CreatedAt
 	result.Base.UpdatedAt = user.UpdatedAt

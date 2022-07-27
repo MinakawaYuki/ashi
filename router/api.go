@@ -12,6 +12,7 @@ func Register(r *gin.Engine) {
 	r.StaticFS("/upload", http.Dir("./runtime/upload"))
 	user(r)
 	upload(r)
+	character(r)
 }
 
 /**
@@ -37,5 +38,17 @@ func upload(r *gin.Engine) {
 		c := &controller.UploadController{}
 		group.POST("/file", c.UploadFile)   //单文件上传
 		group.POST("/files", c.UploadFiles) //多文件上传
+	}
+}
+
+/**
+角色
+*/
+func character(r *gin.Engine) {
+	var group = r.Group("/api/character")
+	group.Use(middleware.JWTAuth())
+	{
+		c := &controller.CharacterController{}
+		group.GET("/getById", c.GetCharacterById)
 	}
 }
