@@ -17,6 +17,7 @@ func init() {
 		}
 	}
 }
+
 func UploadFile(c *gin.Context) (filePath string, err error) {
 	file, err := c.FormFile("file")
 	if err != nil {
@@ -50,7 +51,7 @@ func UploadFiles(c *gin.Context) (filePath []string, err error) {
 }
 
 func getFileName(filename string) string {
-	//3、创建图片保存目录,linux下需要设置权限（0666可读可写） static/upload/20200623
+	//创建图片保存目录,linux下需要设置权限（0666可读可写） runtime/upload/xxx
 	day := time.Now().Format("20060102")
 	name := Md5(day + filename)
 	return name

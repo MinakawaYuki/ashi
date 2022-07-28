@@ -1,10 +1,8 @@
 package utils
 
 import (
-	"ashi/setting"
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	"os"
 )
 
@@ -19,8 +17,4 @@ func Md5(str string) string {
 	}
 	md5String := hex.EncodeToString(m.Sum(nil))
 	return md5String
-}
-
-func Test() {
-	fmt.Println(setting.Redis)
 }
