@@ -14,6 +14,7 @@ func Register(r *gin.Engine) {
 	upload(r)
 	character(r)
 	job(r)
+	weapon(r)
 }
 
 /**
@@ -64,6 +65,18 @@ func job(r *gin.Engine) {
 	group.Use(middleware.JWTAuth())
 	{
 		c := &controller.JobController{}
+		group.POST("/getList", c.GetList)
+	}
+}
+
+/**
+武器
+*/
+func weapon(r *gin.Engine) {
+	var group = r.Group("/api/weapon")
+	group.Use(middleware.JWTAuth())
+	{
+		c := &controller.WeaponController{}
 		group.POST("/getList", c.GetList)
 	}
 }

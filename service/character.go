@@ -57,8 +57,8 @@ func (CharacterRes) GetList(c *gin.Context) (res []CharacterRes, total int64, er
 	var ch model.Character
 	var chr []model.Character
 	var ress []CharacterRes
-	page := com.StrTo(c.DefaultQuery("page", "0")).MustInt()
-	pageSize := com.StrTo(c.DefaultQuery("page_size", "0")).MustInt()
+	page := com.StrTo(c.DefaultQuery("page", "1")).MustInt()
+	pageSize := com.StrTo(c.DefaultQuery("page_size", "15")).MustInt()
 	err = c.ShouldBindJSON(&ch)
 	if err != nil {
 		return []CharacterRes{}, 0, err

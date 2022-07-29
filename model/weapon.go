@@ -1,5 +1,7 @@
 package model
 
+import "ashi/setting"
+
 type Weapon struct {
 	Base
 	Name     string      `json:"name" gorm:"name"`
@@ -12,4 +14,14 @@ type Weapon struct {
 
 func (Weapon) TableName() string {
 	return "weapon"
+}
+
+func (w *Weapon) GetList(j Weapon, page int, pageSize int) (weapon []Weapon, err error) {
+	err = setting.Db.Where(&j).Offset((page - 1) * pageSize).Limit(pageSize).Preload("Pic").Find(&weapon).Error
+	return weapon, err
+}
+
+func (w *Weapon) GetCount(j Weapon) (count int64) {
+	setting.Db.Model(&Weapon{}).Where(&j).Count(&count)
+	return count
 }
