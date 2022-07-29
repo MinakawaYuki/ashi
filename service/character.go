@@ -23,7 +23,7 @@ type CharacterRes struct {
 	Pic               []string `json:"pic"`
 }
 
-func GetByID(c *gin.Context) (res CharacterRes, err error) {
+func (CharacterRes) GetByID(c *gin.Context) (res CharacterRes, err error) {
 	id, exist := c.GetQuery("character_id")
 	if !exist {
 		return CharacterRes{}, errors.New("请传入id")
@@ -38,7 +38,7 @@ func GetByID(c *gin.Context) (res CharacterRes, err error) {
 	return res, nil
 }
 
-func GetDetail(c *gin.Context) (res CharacterRes, err error) {
+func (CharacterRes) GetDetail(c *gin.Context) (res CharacterRes, err error) {
 	var ch model.Character
 	err = c.ShouldBindJSON(&ch)
 	if err != nil {
@@ -53,7 +53,7 @@ func GetDetail(c *gin.Context) (res CharacterRes, err error) {
 	return res, err
 }
 
-func GetList(c *gin.Context) (res []CharacterRes, total int64, err error) {
+func (CharacterRes) GetList(c *gin.Context) (res []CharacterRes, total int64, err error) {
 	var ch model.Character
 	var chr []model.Character
 	var ress []CharacterRes

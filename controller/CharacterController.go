@@ -8,9 +8,11 @@ import (
 type CharacterController struct {
 }
 
+var chh service.CharacterRes
+
 func (ch *CharacterController) GetCharacterById(c *gin.Context) {
 	var chr service.CharacterRes
-	chr, err := service.GetByID(c)
+	chr, err := chh.GetByID(c)
 	if err != nil {
 		ApiError("查询失败", map[string]interface{}{
 			"err": err.Error(),
@@ -24,7 +26,7 @@ func (ch *CharacterController) GetCharacterById(c *gin.Context) {
 
 func (ch *CharacterController) GetCharacter(c *gin.Context) {
 	var chr service.CharacterRes
-	chr, err := service.GetDetail(c)
+	chr, err := chh.GetDetail(c)
 	if err != nil {
 		ApiError("查询失败", map[string]interface{}{
 			"err": err.Error(),
@@ -38,7 +40,7 @@ func (ch *CharacterController) GetCharacter(c *gin.Context) {
 
 func (ch *CharacterController) GetCharacterList(c *gin.Context) {
 	var chr []service.CharacterRes
-	chr, total, err := service.GetList(c)
+	chr, total, err := chh.GetList(c)
 	if err != nil {
 		ApiError("查询失败", map[string]interface{}{
 			"err": err.Error(),

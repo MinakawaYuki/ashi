@@ -13,6 +13,7 @@ func Register(r *gin.Engine) {
 	user(r)
 	upload(r)
 	character(r)
+	job(r)
 }
 
 /**
@@ -52,5 +53,17 @@ func character(r *gin.Engine) {
 		group.GET("/getById", c.GetCharacterById)
 		group.POST("/getInfo", c.GetCharacter)
 		group.POST("/getList", c.GetCharacterList)
+	}
+}
+
+/**
+职业
+*/
+func job(r *gin.Engine) {
+	var group = r.Group("/api/job")
+	group.Use(middleware.JWTAuth())
+	{
+		c := &controller.JobController{}
+		group.POST("/getList", c.GetList)
 	}
 }
