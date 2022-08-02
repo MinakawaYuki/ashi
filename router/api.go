@@ -9,6 +9,7 @@ import (
 
 func Register(r *gin.Engine) {
 	r.Use(gin.Recovery())
+	r.Use(middleware.GetParams())
 	r.StaticFS("/upload", http.Dir("./runtime/upload"))
 	user(r)
 	upload(r)
@@ -22,11 +23,11 @@ func Register(r *gin.Engine) {
 */
 func user(r *gin.Engine) {
 	var group = r.Group("/api/user")
+	c := &controller.UserController{}
+	group.POST("/login", c.Login) //登录
 	group.Use(middleware.JWTAuth())
 	{
-		c := &controller.UserController{}
-		group.POST("/add", c.Add)     //注册
-		group.POST("/login", c.Login) //登录
+		group.POST("/add", c.Add) //注册
 	}
 }
 
