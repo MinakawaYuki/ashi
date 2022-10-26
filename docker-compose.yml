@@ -1,0 +1,10 @@
+version: '2'
+services:
+  ashi-base:
+    build: ./
+    image: ashi
+    container_name: ashi
+    restart: always
+    ports:
+      - "10490:10490"
+
