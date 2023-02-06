@@ -15,7 +15,7 @@ func GetParams() gin.HandlerFunc {
 		for k := range query {
 			queryMap[k] = c.Query(k)
 		}
-		// 获取post 参数
+		// 获取post 参数  Content-Type 需为 multipart/form-data
 		var postMap = make(map[string]any, len(c.Request.PostForm))
 		if err := c.Request.ParseMultipartForm(32 << 20); err != nil {
 			fmt.Println("获取post 参数错误：", err.Error())
