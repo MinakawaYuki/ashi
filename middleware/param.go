@@ -17,18 +17,21 @@ func GetParams() gin.HandlerFunc {
 		}
 		// 获取post 参数
 		var postMap = make(map[string]any, len(c.Request.PostForm))
-		if err := c.Request.ParseMultipartForm(32 << 20); err != nil {
-			fmt.Println("获取post 参数错误：", err.Error())
-		} else {
-			for k, v := range c.Request.PostForm {
-				if len(v) > 1 {
-					postMap[k] = v
-				} else if len(v) == 1 {
-					postMap[k] = v[0]
-				}
+		for k, v := range c.Request.PostForm {
+			if len(v) > 1 {
+				postMap[k] = v
+			} else if len(v) == 1 {
+				postMap[k] = v[0]
 			}
 		}
-		params = utils.MergeMap(queryMap, postMap)
+		// 获取json内容
+		json := make(map[string]any)
+		c.BindJSON(&json)
+		jsonMap := make(map[string]any)
+		for k1, v2 := range json {
+			jsonMap[k1] = v2
+		}
+		params = utils.MergeMap(queryMap, postMap, jsonMap)
 		fmt.Println("params:", params)
 		c.Set("params", params)
 		c.Next()
