@@ -2,15 +2,11 @@ package controller
 
 import (
 	"ashi/service"
+	"ashi/utils"
 	"github.com/gin-gonic/gin"
 )
 
 type UserController struct {
-}
-
-type login struct {
-	UserName string `json:"username,omitempty" binding:"required"`
-	Password string `json:"password" binding:"required"`
 }
 
 func (u *UserController) Add(c *gin.Context) {
@@ -25,13 +21,9 @@ func (u *UserController) Add(c *gin.Context) {
 }
 
 func (u *UserController) Login(c *gin.Context) {
-	var login login
-	err := c.ShouldBindJSON(&login)
-	if err != nil {
-		ApiError("登录失败", map[string]interface{}{}, c)
-		return
-	}
-	data, loginErr := service.Login(login.UserName, login.Password)
+	params, _ := c.Get("params")
+	param := utils.AnyMapToStringMap(params.(map[string]interface{}))
+	data, loginErr := service.Login(param["username"], param["password"])
 	if loginErr != nil {
 		ApiError(loginErr.Error(), map[string]interface{}{}, c)
 		return

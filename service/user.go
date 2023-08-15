@@ -17,15 +17,16 @@ type Result struct {
 
 func AddUser(c *gin.Context) error {
 	var user model.User
-	err := c.ShouldBindJSON(&user)
+	params, _ := c.Get("params")
+	param := utils.AnyMapToStringMap(params.(map[string]interface{}))
+	user.Name = param["name"]
+	user.UserName = param["username"]
+	user.PassWord = param["password"]
 	salt := utils.GenRandString(6)
 	user.PassWord = utils.Md5(user.PassWord + salt)
 	user.Salt = salt
-	if err != nil {
-		log.Info(map[string]interface{}{}, "user 绑定json失败")
-		return err
-	}
-	err = user.Add(user)
+
+	err := user.Add(user)
 	if err != nil {
 		log.Info(map[string]interface{}{}, "user 创建失败")
 		return err

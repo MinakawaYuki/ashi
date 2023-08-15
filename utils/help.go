@@ -30,3 +30,28 @@ func ArrayMerge(arrays ...[]any) []any {
 	}
 	return s
 }
+
+func AnyMapToStringMap(anyMap map[string]interface{}) map[string]string {
+	convertedMap := make(map[string]string)
+
+	for key, value := range anyMap {
+		if strValue, ok := value.(string); ok {
+			convertedMap[key] = strValue
+		}
+	}
+
+	return convertedMap
+}
+
+//func AnyToStringMap(anyData any) map[string]string {
+//	convertedMap := make(map[string]string)
+//
+//	for i := 0; i < len(anyData)-1; i += 2 {
+//		if key, ok := anyData[i].(string); ok {
+//			if value, ok := anyData[i+1].(string); ok {
+//				convertedMap[key] = value
+//			}
+//		}
+//	}
+//	return convertedMap
+//}
