@@ -22,7 +22,7 @@ func (u *UserController) Add(c *gin.Context) {
 
 func (u *UserController) Login(c *gin.Context) {
 	params, _ := c.Get("params")
-	param := utils.AnyMapToStringMap(params.(map[string]interface{}))
+	param := utils.AnyMapToStringMap(params.(map[string]any))
 	data, loginErr := service.Login(param["username"], param["password"])
 	if loginErr != nil {
 		ApiError(loginErr.Error(), map[string]interface{}{}, c)

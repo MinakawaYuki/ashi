@@ -31,7 +31,7 @@ func ArrayMerge(arrays ...[]any) []any {
 	return s
 }
 
-func AnyMapToStringMap(anyMap map[string]interface{}) map[string]string {
+func AnyMapToStringMap(anyMap map[string]any) map[string]string {
 	convertedMap := make(map[string]string)
 
 	for key, value := range anyMap {
